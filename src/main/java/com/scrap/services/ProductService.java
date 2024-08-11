@@ -29,6 +29,13 @@ public class ProductService {
     public List<Product> getAllproducts(Long userProfileId) {
         return productRepository.findAllProducts(userProfileId);
     }
+    public List<Product> getAllproducts() {
+        return productRepository.findAllActiveProducts();
+    }
+
+    public Product getAllproduct(Long productId) {
+        return productRepository.getOne(productId);
+    }
 
     public Product updateProduct(ProductDTO productDTO, Long userId) {
         Product existingProduct = productRepository.findByProductIdAndUserProfileId(productDTO.getProductId(), userId);

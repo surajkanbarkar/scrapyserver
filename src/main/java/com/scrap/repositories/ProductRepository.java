@@ -15,8 +15,11 @@ import com.scrap.entities.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query("SELECT p FROM Product p WHERE p.productStatus = true AND p.userProfile.userProfileId = :userProfileId ORDER BY p.createdOn DESC")
+    @Query("SELECT p FROM Product p WHERE p.userProfile.userProfileId = :userProfileId ORDER BY p.createdOn DESC")
     List<Product> findAllProducts(@Param("userProfileId") Long userProfileId);
+
+    @Query("SELECT p FROM Product p WHERE p.productStatus = true ORDER BY p.createdOn DESC")
+    List<Product> findAllActiveProducts();
 
     @Query("SELECT p FROM Product p WHERE p.productId = :productId AND p.productStatus = true AND p.userProfile.userProfileId = :userProfileId ORDER BY p.createdOn DESC")
     Product findByProductIdAndUserProfileId(@Param("productId") Long productId, @Param("userProfileId") Long userProfileId);

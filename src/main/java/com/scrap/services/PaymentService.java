@@ -3,6 +3,7 @@ package com.scrap.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.scrap.dto.PaymentDTO;
 import com.scrap.entities.Payment;
 import com.scrap.exception.ResourceNotFoundException;
 import com.scrap.repositories.PaymentRepository;
@@ -16,9 +17,13 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public Payment savePayment(Payment payment) {
-        payment.setCreatedOn(LocalDateTime.now());
-        payment.setUpdatedOn(LocalDateTime.now());
+    public Payment savePayment(PaymentDTO paymentDTO) {
+        Payment payment = new Payment();
+                payment.setTransactionId(paymentDTO.getTransactionId());
+                payment.setTransactionStatus(true);
+                payment.setModeOfPayment("Online");
+                payment.setCreatedOn(LocalDateTime.now());
+                payment.setUpdatedOn(LocalDateTime.now());
         return paymentRepository.save(payment);
     }
 

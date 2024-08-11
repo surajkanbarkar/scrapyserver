@@ -2,6 +2,7 @@ package com.scrap.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.stereotype.Service;
 
 import com.scrap.entities.Order;
@@ -18,6 +19,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public Order saveOrder(Order order) {
+        order.setOrderStatus(true);
         order.setCreatedOn(LocalDateTime.now());
         order.setUpdatedOn(LocalDateTime.now());
         return orderRepository.save(order);
@@ -31,7 +33,6 @@ public class OrderService {
         Optional<Order> existingOrder = orderRepository.findById(id);
         if (existingOrder.isPresent()) {
             Order updatedOrder = existingOrder.get();
-            updatedOrder.setOrderedQuantity(order.getOrderedQuantity());
             updatedOrder.setOrderStatus(order.getOrderStatus());
             updatedOrder.setUpdatedOn(LocalDateTime.now());
             return orderRepository.save(updatedOrder);

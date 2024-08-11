@@ -90,6 +90,15 @@ public class AuthController {
         return ResponseEntity.ok("Logout successful");
     }
 
+    @GetMapping("/verify/{userProfileId}")
+    public ResponseEntity<?> verifyUser(@PathVariable Long userProfileId) {
+        UserProfile userProfile = userProfileService.getUserProfile(userProfileId);
+        if (userProfile != null){
+            return new ResponseEntity<>(userProfile, HttpStatus.OK);    
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+    }
+
     @GetMapping("/user/profile")
     public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String token) {
         if (token != null && jwtTokenUtil.validateToken(token)) {

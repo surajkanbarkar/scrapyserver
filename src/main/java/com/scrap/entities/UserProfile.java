@@ -30,7 +30,6 @@ public class UserProfile {
     public String getMobile() {
 		return mobile;
 	}
-
     
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
@@ -49,11 +48,9 @@ public class UserProfile {
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private User user;
 
-    // Default constructor
     public UserProfile() {
     }
 
-    // Parameterized constructor
     public UserProfile(String name, String emailId, String companyName, String companyAddress, String mobile, String userRole, boolean isActive, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.name = name;
         this.email = emailId;
@@ -66,7 +63,6 @@ public class UserProfile {
         this.mobile=mobile;
     }
 
-    // Getters and Setters
     public Long getUserProfileId() {
         return userProfileId;
     }
@@ -147,7 +143,6 @@ public class UserProfile {
         this.user = user;
     }
 
-    // toString method
     @Override
     public String toString() {
         return "UserProfiles{" +
