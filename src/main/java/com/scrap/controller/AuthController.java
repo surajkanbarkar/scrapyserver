@@ -5,6 +5,7 @@ import com.scrap.dto.LoginRequest;
 import com.scrap.dto.LoginResponse;
 import com.scrap.dto.Response;
 import com.scrap.dto.SignupRequest;
+import com.scrap.dto.UserProfileDTO;
 import com.scrap.entities.User;
 import com.scrap.entities.UserProfile;
 import com.scrap.repositories.UserProfileRepository;
@@ -19,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -109,5 +112,32 @@ public class AuthController {
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+    }
+
+    @PutMapping("/update_profile/{userProfileId}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long userProfileId, @RequestBody UserProfileDTO userProfileDTO) {
+        UserProfile userProfile = userProfileService.getUserProfile(userProfileId);
+        if (userProfile != null){
+            User user = userRepository.getOne(userProfileDTO.getUserId());
+            userProfile.setCompanyName(userProfileDTO.getCompanyName());
+            userProfile.setCompanyAddress(userProfileDTO.getCompanyAddress());
+            userProfile.setEmailId(userProfileDTO.getEmail());
+            userProfile.setMobile(userProfileDTO.getMobile());
+            userProfile.setName(userProfileDTO.getName());
+            userProfile.setUpdatedOn(LocalDateTime.now());
+            userProfile.setUser(user);
+            userProfileRepository.save(userProfile);
+            return new ResponseEntity<>(userProfile, HttpStatus.OK);    
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
+    }
+
+    @GetMapping("/profile/{userProfileId}")
+    public ResponseEntity<?> getProfile(@PathVariable Long userProfileId) {
+        UserProfile userProfile = userProfileService.getUserProfile(userProfileId);
+        if (userProfile != null){
+            return new ResponseEntity<>(userProfile, HttpStatus.OK);    
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
     }
 }

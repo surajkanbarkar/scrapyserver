@@ -19,11 +19,11 @@ public class PaymentService {
 
     public Payment savePayment(PaymentDTO paymentDTO) {
         Payment payment = new Payment();
-                payment.setTransactionId(paymentDTO.getTransactionId());
-                payment.setTransactionStatus(true);
-                payment.setModeOfPayment("Online");
-                payment.setCreatedOn(LocalDateTime.now());
-                payment.setUpdatedOn(LocalDateTime.now());
+        payment.setTransactionId(paymentDTO.getTransactionId());
+        payment.setTransactionStatus(true);
+        payment.setModeOfPayment("Online");
+        payment.setCreatedOn(LocalDateTime.now());
+        payment.setUpdatedOn(LocalDateTime.now());
         return paymentRepository.save(payment);
     }
 
