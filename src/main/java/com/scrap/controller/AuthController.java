@@ -64,13 +64,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         User user = userRepository.getByEmail(loginRequest.getEmail());
-        if (user.getPassword().equals(loginRequest.getPassword())) {
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email");    
+        }
+        else if (user.getPassword().equals(loginRequest.getPassword())) {
             String token = jwtTokenUtil.generateToken(user.getEmail());
             UserProfile userProfile = userProfileService.getUserProfileByEmail(user.getEmail());
             LoginResponse loginResponse = new LoginResponse(token, userProfile);
             return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
 
     @PutMapping("/forgot_password")
@@ -79,9 +82,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords not matching");
         }
         User user = userRepository.getByEmail(forgotPasswordRequest.getEmail());
+        if (forgotPasswordRequest.getPassword().equals(user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password should not be same as previous password");
+        }
         if (user != null) {
             user.setPassword(forgotPasswordRequest.getPassword());
-            User user1 = userService.updateUser(user);
+            userService.updateUser(user);
             return ResponseEntity.status(HttpStatus.OK).body("Password changed successfully!");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
